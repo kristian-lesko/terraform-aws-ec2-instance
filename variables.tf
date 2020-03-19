@@ -187,3 +187,20 @@ variable "use_num_suffix" {
   default     = false
 }
 
+variable "remote-exec-inline" {
+  description = "remote-exec provisioner commands"
+  type        = list(string)
+  default     = []
+}
+
+variable "remote-exec-user" {
+  description = "remote-exec provisioner ssh user"
+  type        = string
+  default     = "ec2-user"
+}
+
+variable "private_key_location" {
+  description = "remote-exec private key filesystem location"
+  type        = string
+  default     = "~/.ssh/id_rsa"
+}
