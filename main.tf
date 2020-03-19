@@ -93,4 +93,12 @@ resource "aws_instance" "this" {
   credit_specification {
     cpu_credits = local.is_t_instance_type ? var.cpu_credits : null
   }
+
+  lifecycle {
+    ignore_changes = [
+      # Ignore changes to tags, e.g. because a management agent
+      # updates these based on some ruleset managed elsewhere.
+      tags, user_data, user_data_base64, ami,
+    ]
+  }
 }
