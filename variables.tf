@@ -187,3 +187,8 @@ variable "use_num_suffix" {
   default     = false
 }
 
+variable "remote-exec" {
+  description = "remote-exec provisioner commands"
+  type        = list(string)
+  default     = []
+}

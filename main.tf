@@ -101,4 +101,26 @@ resource "aws_instance" "this" {
       tags, user_data, user_data_base64, ami,
     ]
   }
+  provisioner "remote-exec" {
+    inline = var.remote-exec
+    connection {
+      type     = "ssh"
+      user     = "ubuntu"
+#      host     = var.instance_count > 1 ? element(aws_instance.this.*.public_ip, count.index) : aws_instance.this.*.public_ip
+      host     = self.public_ip
+      private_key = file("/root/.ssh/id_rsa")
+    }
+  }
+
 }
+
+#resource "null_resource" "this" {
+#  provisioner "remote-exec" {
+#    inline = var.remote-exec
+#    connection {
+#      type     = "ssh"
+#      user     = "ubuntu"
+#      host     = aws_instance.this.*.public_ip
+#    }
+#  }
+#}
