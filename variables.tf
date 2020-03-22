@@ -202,5 +202,5 @@ variable "remote-exec-user" {
 variable "private_key_location" {
   description = "remote-exec private key filesystem location"
   type        = string
-  default     = "${HOME}/.ssh/id_rsa"
+  default     = "~/.ssh/id_rsa"
 }
