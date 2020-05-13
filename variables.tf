@@ -199,8 +199,33 @@ variable "remote-exec-user" {
   default     = "ec2-user"
 }
 
-variable "private_key_location" {
-  description = "remote-exec private key filesystem location"
-  type        = string
-  default     = "~/.ssh/id_rsa"
+#variable "private_key_location" {
+#  description = "remote-exec private key filesystem location"
+#  type        = string
+#  default     = "~/.ssh/id_rsa"
+#}
+
+variable "assign_eip" {
+  description = "Should be true if you want EIPs assigned for your instances"
+  type        = bool
+  default     = false
 }
+
+variable "reuse_eip_ips" {
+  description = "Should be true if you don't want EIPs to be created for your instances and will instead pass them in via the 'instance_eip_ids' variable"
+  type        = bool
+  default     = false
+}
+
+variable "instance_eip_ids" {
+  description = "List of EIP IDs to be assigned to the instances (used in combination with reuse_eip_ips)"
+  type        = list(string)
+  default     = []
+}
+
+variable "instance_eip_tags" {
+  description = "Additional tags for the instance EIP"
+  type        = map(string)
+  default     = {}
+}
+
