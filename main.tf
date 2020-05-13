@@ -1,5 +1,9 @@
 locals {
   is_t_instance_type = replace(var.instance_type, "/^t(2|3|3a){1}\\..*$/", "1") == "1" ? true : false
+  instance_eip_ips = split(
+    ",",
+    var.reuse_eip_ips ? join(",", var.instance_eip_ids) : join(",", aws_eip.nat.*.id),
+  )
 }
 
 resource "aws_instance" "this" {
@@ -102,15 +106,15 @@ resource "aws_instance" "this" {
       tags, user_data, user_data_base64, ami,
     ]
   }
-  provisioner "remote-exec" {
-    inline = var.remote-exec-inline
-    connection {
-      type     = "ssh"
-      user     = var.remote-exec-user
-      host     = self.public_ip
-      private_key = file(var.private_key_location)
-    }
-  }
+#  provisioner "remote-exec" {
+#    inline = var.remote-exec-inline
+#    connection {
+#      type     = "ssh"
+#      user     = var.remote-exec-user
+#      host     = self.public_ip
+#      private_key = file(var.private_key_location)
+#    }
+#  }
 
 }
 
@@ -124,3 +128,34 @@ resource "aws_instance" "this" {
 #    }
 #  }
 #}
+
+resource "aws_eip" "instance" {
+  count = var.assign_eip && false == var.reuse_eip_ips ? var.instance_count : 0
+
+  vpc = true
+
+  tags = merge(
+    {
+      "Name" = format(
+        "%s-%s",
+        var.name,
+        element(var.instance_count, count.index),
+      )
+    },
+    var.tags,
+    var.instance_eip_tags,
+  )
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  count = var.assign_eip ? var.instance_count : 0
+  instance_id = element(
+    aws_instance.this.*.id,
+    count.index,
+  )
+
+  allocation_id = element(
+    local.instance_gateway_ips,
+    count.index,
+  )
+}
