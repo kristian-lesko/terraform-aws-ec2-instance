@@ -107,3 +107,15 @@ output "instance_count" {
   description = "Number of instances to launch specified as argument to this module"
   value       = var.instance_count
 }
+
+output "userdata_rendered" {
+  description = "userdata rendered content"
+  value       = data.template_file.userdata.*.rendered
+}
+
+output "freeipa_otp" {
+  description = "freeipa host provision OTP"
+  value = random_password.freeipa_otp.*.result
+}
+
+

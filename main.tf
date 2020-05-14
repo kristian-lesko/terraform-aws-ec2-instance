@@ -11,7 +11,7 @@ resource "aws_instance" "this" {
 
   ami              = var.ami
   instance_type    = var.instance_type
-  user_data        = var.user_data
+  user_data        = user_data_template == null ? var.user_data : element(data.template_file.userdata.*.rendered, count.index)
   user_data_base64 = var.user_data_base64
   subnet_id = length(var.network_interface) > 0 ? null : element(
     distinct(compact(concat([var.subnet_id], var.subnet_ids))),
@@ -159,3 +159,27 @@ resource "aws_eip_association" "eip_assoc" {
     count.index,
   )
 }
+
+data template_file "userdata" {
+  count = var.instance_count
+
+  template = file("${path.module}/${var.user_data_template}")
+
+  vars = {
+    freeipa_otp = element(random_password.freeipa_otp.*.result,count.index,)
+  }
+}
+
+resource "random_password" "freeipa_otp" {
+  count = var.instance_count
+
+  length = 32
+  special = false
+  keepers = {
+    uuid = element(
+      aws_instance.this.*.id,
+      count.index,
+    )
+  }
+}
+

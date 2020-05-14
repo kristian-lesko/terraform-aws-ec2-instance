@@ -121,6 +121,12 @@ variable "user_data_base64" {
   default     = null
 }
 
+variable "user_data_template" {
+  description = "The user data template file"
+  type        = string
+  default     = null
+}
+
 variable "iam_instance_profile" {
   description = "The IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile."
   type        = string
