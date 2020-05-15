@@ -235,3 +235,33 @@ variable "instance_eip_tags" {
   default     = {}
 }
 
+variable "clusterid" {
+  description = "clusterid"
+  type        = string
+  default     = ""
+}
+
+variable "subcluster" {
+  description = "subcluster"
+  type        = string
+  default     = ""
+}
+
+variable "role" {
+  description = "role"
+  type        = string
+  default     = ""
+}
+
+variable "datacenter" {
+  description = "datacenter"
+  type        = string
+  default     = ""
+}
+
+variable "environment" {
+  description = "environment"
+  type        = string
+  default     = ""
+}
+

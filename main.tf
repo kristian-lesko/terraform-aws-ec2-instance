@@ -164,10 +164,15 @@ resource "aws_eip_association" "eip_assoc" {
 data template_file "userdata" {
   count = var.instance_count
 
-  template = file("${path.module}/${var.user_data_template}")
+  template = file("${var.user_data_template}")
 
   vars = {
     freeipa_otp = element(random_password.freeipa_otp.*.result,count.index,)
+    clusterid = var.clusterid
+    subcluster = var.subcluster
+    role = var.role
+    datacenter = var.datacenter
+    environment = var.environment
   }
 }
 
