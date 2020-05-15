@@ -176,10 +176,11 @@ resource "random_password" "freeipa_otp" {
   length = 32
   special = false
   keepers = {
-    uuid = element(
-      aws_instance.this.*.id,
-      count.index,
-    )
+     uuid = uuid()
+#    uuid = element(
+#      aws_instance.this.*.id,
+#      count.index,
+#    )
   }
 }
 
