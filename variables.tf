@@ -265,3 +265,9 @@ variable "environment" {
   default     = ""
 }
 
+variable "puppet_master_key" {
+  description = "puppet_master_key"
+  type        = string
+  default     = ""
+}
+

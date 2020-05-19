@@ -173,6 +173,7 @@ data template_file "userdata" {
     role = var.role
     datacenter = var.datacenter
     environment = var.environment
+    puppet_master_key = var.puppet_master_key
   }
 }
 
