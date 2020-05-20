@@ -271,3 +271,9 @@ variable "puppet_master_key" {
   default     = ""
 }
 
+variable "vault_gpg_key" {
+  description = "vault_gpg_key"
+  type        = string
+  default     = ""
+}
+
