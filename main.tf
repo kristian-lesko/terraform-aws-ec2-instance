@@ -175,6 +175,7 @@ data template_file "userdata" {
     environment = var.environment
     puppet_master_key = var.puppet_master_key
     vault_gpg_key = var.vault_gpg_key
+    hostname = var.hostname
   }
 }
 

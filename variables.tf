@@ -277,3 +277,8 @@ variable "vault_gpg_key" {
   default     = ""
 }
 
+variable "hostname" {
+  description = "hostname"
+  type        = string
+  default     = ""
+}
