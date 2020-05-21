@@ -282,3 +282,13 @@ variable "hostname" {
   type        = string
   default     = ""
 }
+
+variable "domain" {
+  description = "FreeIPA domain to deploy the host in"
+  type        = string
+}
+
+variable "ipa_hostgroup" {
+  description = "FreeIPA hostgroup to assign the host into"
+  type        = string
+}

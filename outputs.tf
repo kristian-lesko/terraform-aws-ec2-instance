@@ -112,10 +112,3 @@ output "userdata_rendered" {
   description = "userdata rendered content"
   value       = data.template_file.userdata.*.rendered
 }
-
-output "freeipa_otp" {
-  description = "freeipa host provision OTP"
-  value = random_password.freeipa_otp.*.result
-}
-
-

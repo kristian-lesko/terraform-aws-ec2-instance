@@ -90,7 +90,7 @@ resource "aws_instance" "this" {
 
   volume_tags = merge(
     {
-      "Name" = var.instance_count > 1 || var.use_num_suffix ? format("%s-%d", var.name, count.index + 1) : var.name
+      "Name" = var.instance_count > 1 || var.use_num_suffix ? format("%s-%d:/mnt", var.name, count.index + 1) : "${var.name}:/mnt"
     },
     var.volume_tags,
   )
@@ -167,7 +167,7 @@ data template_file "userdata" {
   template = file("${var.user_data_template}")
 
   vars = {
-    freeipa_otp = element(random_password.freeipa_otp.*.result,count.index,)
+    freeipa_otp = element(random_password.freeipa_otp.*.result, count.index)
     clusterid = var.clusterid
     subcluster = var.subcluster
     role = var.role
@@ -184,12 +184,22 @@ resource "random_password" "freeipa_otp" {
 
   length = 32
   special = false
-  keepers = {
-     uuid = uuid()
-#    uuid = element(
-#      aws_instance.this.*.id,
-#      count.index,
-#    )
-  }
 }
 
+resource "null_resource" "freeipa-enrollment" {
+  count = var.instance_count
+
+  triggers = {
+    instance_id = element(aws_instance.this.*.id, count.index)
+  }
+
+  provisioner "local-exec" {
+    command = "${path.module}/scripts/enroll_into_freeipa.sh"
+    environment = {
+      NAME = var.hostname
+      DOMAIN = var.domain
+      IPA_HOSTGROUP = var.ipa_hostgroup
+      FREEIPA_OTP = element(random_password.freeipa_otp.*.result, count.index)
+    }
+  }
+}
